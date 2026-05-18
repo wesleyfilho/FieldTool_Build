@@ -10,13 +10,14 @@ from pathlib import Path
 
 from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton,
-    QLineEdit, QFrame, QProgressBar, QTextEdit, QMessageBox,
+    QFrame, QProgressBar, QTextEdit, QMessageBox,
 )
 from PySide6.QtCore import Qt, Signal
 
 from app.version import VERSION
-from app.core.config import config
 from app.ui.styles import C_SUCCESS, C_ERROR, C_TEXT_DIM, C_WARNING, C_ACCENT2
+
+GITHUB_REPO = "wesleyfilho/FieldTool_Build"
 
 
 # ── Helpers ──────────────────────────────────────────────────────────────────
@@ -120,28 +121,6 @@ class UpdatesPage(QWidget):
         sub.setStyleSheet(f"color: {C_TEXT_DIM};")
         layout.addWidget(sub)
 
-        # ── GitHub repo config ──
-        repo_frame = QFrame()
-        repo_frame.setObjectName("card")
-        repo_layout = QHBoxLayout(repo_frame)
-        repo_layout.setContentsMargins(16, 12, 16, 12)
-
-        repo_lbl = QLabel("Repositorio GitHub:")
-        repo_lbl.setStyleSheet(f"color: {C_TEXT_DIM};")
-        repo_layout.addWidget(repo_lbl)
-
-        self._repo_input = QLineEdit()
-        self._repo_input.setPlaceholderText("usuario/fieldtool")
-        self._repo_input.setText(config.get("github_repo", ""))
-        self._repo_input.setMinimumWidth(240)
-        repo_layout.addWidget(self._repo_input, 1)
-
-        btn_save_repo = QPushButton("Salvar")
-        btn_save_repo.clicked.connect(self._save_repo)
-        repo_layout.addWidget(btn_save_repo)
-
-        layout.addWidget(repo_frame)
-
         # ── Version info card ──
         info_frame = QFrame()
         info_frame.setObjectName("card")
@@ -235,32 +214,15 @@ class UpdatesPage(QWidget):
 
         layout.addStretch()
 
-    # ── Repo save ─────────────────────────────────────────────────────────────
-
-    def _save_repo(self):
-        repo = self._repo_input.text().strip()
-        if repo and "/" not in repo:
-            QMessageBox.warning(self, "Aviso", "Formato invalido. Use: usuario/nome-repo")
-            return
-        config.set("github_repo", repo)
-        self._log_sig.emit(f"Repositorio salvo: {repo}", C_SUCCESS)
-
     # ── Check update ──────────────────────────────────────────────────────────
 
     def _check_update(self):
-        repo = self._repo_input.text().strip()
-        if not repo:
-            QMessageBox.warning(self, "Aviso",
-                "Configure o repositorio GitHub antes de verificar.\n"
-                "Formato: usuario/nome-do-repo")
-            return
-        config.set("github_repo", repo)
         self._state_sig.emit("checking")
-        self._log_sig.emit(f"Verificando atualizacoes em github.com/{repo}...", "")
+        self._log_sig.emit(f"Verificando atualizacoes em github.com/{GITHUB_REPO}...", "")
 
         def _run():
             try:
-                release = _fetch_release(repo)
+                release = _fetch_release(GITHUB_REPO)
                 self._release_sig.emit(release)
             except Exception as e:
                 self._log_sig.emit(f"Erro ao verificar: {e}", C_ERROR)
@@ -335,10 +297,8 @@ class UpdatesPage(QWidget):
         threading.Thread(target=_run, daemon=True).start()
 
     def _open_github(self):
-        repo = config.get("github_repo", "")
-        if repo:
-            import webbrowser
-            webbrowser.open(f"https://github.com/{repo}/releases/latest")
+        import webbrowser
+        webbrowser.open(f"https://github.com/{GITHUB_REPO}/releases/latest")
 
     # ── Slots (main thread) ───────────────────────────────────────────────────
 
