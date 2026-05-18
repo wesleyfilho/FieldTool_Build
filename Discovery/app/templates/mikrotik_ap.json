@@ -1,0 +1,19 @@
+{
+  "name": "MikroTik AP Padrao",
+  "device_type": "mikrotik",
+  "config_type": "ap",
+  "description": "Access Point MikroTik com DHCP, NAT e wireless",
+  "params": {
+    "ssid": "MinhaRede",
+    "password": "senha12345",
+    "band": "2ghz-b/g/n",
+    "wlan_iface": "wlan1",
+    "lan_iface": "ether2",
+    "wan_iface": "ether1",
+    "ip": "192.168.88.1/24",
+    "dhcp_pool": "192.168.88.10-192.168.88.200",
+    "gateway": "192.168.88.1",
+    "dns": "8.8.8.8",
+    "nat": true
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "name": "MikroTik Cliente",
+  "device_type": "mikrotik",
+  "config_type": "client",
+  "description": "MikroTik em modo station (cliente wireless)",
+  "params": {
+    "ssid": "RedeDoProvedor",
+    "password": "",
+    "band": "2ghz-b/g/n",
+    "wlan_iface": "wlan1",
+    "lan_iface": "ether1",
+    "wan_iface": "wlan1",
+    "dhcp_client_iface": "wlan1",
+    "nat": true
+  }
+}

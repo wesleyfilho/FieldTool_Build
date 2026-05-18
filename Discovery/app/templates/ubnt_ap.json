@@ -1,0 +1,20 @@
+{
+  "name": "Ubiquiti AP Padrao",
+  "device_type": "ubiquiti",
+  "config_type": "ap",
+  "description": "Access Point Ubiquiti com IP estatico e WPA2",
+  "params": {
+    "ssid": "MinhaRede",
+    "password": "senha12345",
+    "channel": 6,
+    "channel_width": 20,
+    "txpower": 20,
+    "frequency_band": "2.4GHz",
+    "security": "WPA2",
+    "ip": "192.168.1.20",
+    "netmask": "255.255.255.0",
+    "gateway": "192.168.1.1",
+    "dns": "8.8.8.8",
+    "mode": "access-point"
+  }
+}
